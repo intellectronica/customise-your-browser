@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hacker News AI Summary
 // @namespace    https://elite-ai-assisted-coding.dev/
-// @version      0.0.3
+// @version      0.0.4
 // @description  Adds a "summary" link to Hacker News items that uses Chrome's built-in AI Summarizer API.
 // @author       GitHub Copilot
 // @match        https://news.ycombinator.com/*
@@ -145,23 +145,39 @@
             }
 
             // Check availability using the correct method (availability or capabilities)
-            let isAvailable = false;
+            let availabilityStatus = 'available';
             if (typeof summarizerAPI.availability === 'function') {
-                const availability = await summarizerAPI.availability();
-                isAvailable = (availability !== 'unavailable');
+                availabilityStatus = await summarizerAPI.availability();
             } else if (typeof summarizerAPI.capabilities === 'function') {
                 const capabilities = await summarizerAPI.capabilities();
-                isAvailable = (capabilities.available !== 'no');
-            } else {
-                // If neither method exists, we'll try to proceed to create() and catch errors there
-                isAvailable = true; 
+                availabilityStatus = capabilities.available === 'no' ? 'unavailable' : 'available';
             }
 
-            if (!isAvailable) {
-                throw new Error('Summarizer API is not supported or model is not yet downloaded.');
+            if (availabilityStatus === 'unavailable') {
+                throw new Error('Summarizer API is not supported on this device.');
             }
 
-            // 2. Fetch the page content using GM_xmlhttpRequest (to bypass CORS)
+            // 2. Create the summarizer session IMMEDIATELY to preserve the user gesture.
+            // Chrome requires a user gesture (like the click that triggered this function)
+            // to start a download if the model isn't already present.
+            if (availabilityStatus === 'downloadable' || availabilityStatus === 'downloading') {
+                contentArea.innerText = 'Downloading AI model... this may take a minute.';
+            }
+
+            const summarizer = await summarizerAPI.create({
+                type: 'teaser',
+                format: 'plain-text',
+                length: 'medium',
+                monitor(m) {
+                    m.addEventListener('downloadprogress', (e) => {
+                        const percent = Math.round((e.loaded / e.total) * 100);
+                        contentArea.innerText = `Downloading AI model: ${percent}%...`;
+                    });
+                }
+            });
+
+            // 3. Fetch the page content using GM_xmlhttpRequest (to bypass CORS)
+            // We do this AFTER creating the summarizer to ensure the user gesture isn't lost.
             const response = await new Promise((resolve, reject) => {
                 GM_xmlhttpRequest({
                     method: 'GET',
@@ -177,7 +193,7 @@
                 throw new Error(`Failed to load page (Status ${response.status})`);
             }
 
-            // 3. Parse the HTML and extract readable text
+            // 4. Parse the HTML and extract readable text
             const parser = new DOMParser();
             const doc = parser.parseFromString(response.responseText, 'text/html');
             
@@ -196,17 +212,10 @@
                 throw new Error('Could not extract enough text from the page to summarize.');
             }
 
-            // 4. Create a summarizer session and generate the summary
-            // We use 'teaser' type to get a concise one-paragraph summary.
-            const summarizer = await summarizerAPI.create({
-                type: 'teaser',
-                format: 'plain-text',
-                length: 'medium'
-            });
-
+            // 5. Generate the summary
             const summary = await summarizer.summarize(text);
             
-            // 5. Update the tooltip with the final summary
+            // 6. Update the tooltip with the final summary
             contentArea.innerText = summary;
             
             // Clean up the session to free resources
