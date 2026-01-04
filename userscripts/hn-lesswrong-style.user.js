@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hacker News - LessWrong Style
 // @namespace    https://elite-ai-assisted-coding.dev/
-// @version      0.0.1
+// @version      0.0.2
 // @description  Reformats Hacker News to look like LessWrong (styling only, content unchanged)
 // @author       GitHub Copilot
 // @match        https://news.ycombinator.com/*
@@ -12,75 +12,76 @@
     'use strict';
 
     /**
-     * This userscript applies LessWrong-inspired styling to Hacker News.
-     * It transforms the dense, orange-accented HN interface into a cleaner,
-     * more spacious design similar to LessWrong, while preserving all content.
+     * This userscript applies authentic LessWrong styling to Hacker News.
+     * It replicates the elegant, minimal design of LessWrong with its characteristic
+     * beige background, serif fonts, and clean row-based layout.
      */
 
     // Apply comprehensive CSS styling to transform HN into LessWrong-like appearance
     GM_addStyle(`
         /* === GLOBAL STYLES === */
         
-        /* Reset body styling - cleaner background and modern fonts */
+        /* Body - characteristic beige/cream background like LessWrong */
         body {
-            background: #f4f4f4 !important;
+            background: rgb(248, 244, 238) !important;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-            font-size: 16px !important;
-            line-height: 1.6 !important;
-            color: #333 !important;
+            font-size: 14px !important;
+            line-height: 1.5 !important;
+            color: rgba(0, 0, 0, 0.87) !important;
             padding: 0 !important;
             margin: 0 !important;
         }
 
-        /* Main content container - centered with max width like LessWrong */
+        /* Main content container - no shadow, just clean content */
         body > center {
-            max-width: 1200px !important;
+            max-width: 1000px !important;
             margin: 0 auto !important;
-            background: #fff !important;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1) !important;
+            background: transparent !important;
+            box-shadow: none !important;
         }
 
         /* Main table container */
         body > center > table {
             width: 100% !important;
             border: none !important;
-            background: #fff !important;
+            background: transparent !important;
         }
 
         /* === HEADER STYLES === */
         
-        /* Header bar - transform orange bar to cleaner design */
+        /* Header bar - minimal white header like LessWrong */
         body > center > table > tbody > tr:first-child {
-            background: linear-gradient(135deg, #2c5282 0%, #1a365d 100%) !important;
+            background: #fff !important;
             height: auto !important;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
         }
 
         body > center > table > tbody > tr:first-child td {
-            padding: 16px 24px !important;
+            padding: 12px 16px !important;
             background: transparent !important;
         }
 
         /* Hacker News logo/title */
         body > center > table > tbody > tr:first-child .pagetop {
-            font-size: 20px !important;
+            font-size: 16px !important;
             font-weight: 600 !important;
             letter-spacing: 0.5px !important;
         }
 
         body > center > table > tbody > tr:first-child .pagetop a {
-            color: #fff !important;
+            color: rgba(0, 0, 0, 0.87) !important;
             text-decoration: none !important;
             font-weight: 600 !important;
         }
 
         body > center > table > tbody > tr:first-child .pagetop a:hover {
-            opacity: 0.9 !important;
+            opacity: 0.7 !important;
         }
 
-        /* Logo image - make it blend with new header */
+        /* Logo image - subtle styling */
         body > center > table > tbody > tr:first-child img {
-            filter: brightness(0) invert(1) !important;
-            opacity: 0.9 !important;
+            opacity: 0.7 !important;
+            vertical-align: middle !important;
         }
 
         /* === STORY LIST STYLES === */
@@ -88,44 +89,47 @@
         /* Main story table */
         table.itemlist {
             width: 100% !important;
-            border-collapse: separate !important;
+            border-collapse: collapse !important;
             border-spacing: 0 !important;
             background: transparent !important;
         }
 
-        /* Story rows - add card-like appearance */
+        /* Story rows - clean white rows with subtle borders like LessWrong */
         .athing {
             background: #fff !important;
-            border-radius: 8px !important;
-            margin: 16px 24px !important;
-            padding: 20px !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.08) !important;
-            transition: all 0.2s ease !important;
-            border: 1px solid #e5e5e5 !important;
+            border-radius: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+            transition: background 0.15s ease !important;
+            border: none !important;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.05) !important;
         }
 
         .athing:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
-            transform: translateY(-1px) !important;
+            background: rgb(245, 245, 245) !important;
+            box-shadow: none !important;
+            transform: none !important;
         }
 
-        /* Story title row */
-        .athing td.title {
-            padding: 0 !important;
+        /* Create flex layout for story content */
+        .athing > tbody > tr {
+            display: flex !important;
+            align-items: center !important;
+            padding: 10px 10px 10px 6px !important;
         }
 
-        /* Rank number - larger and styled */
+        /* Hide the rank number column */
         .athing td.title:first-child {
-            font-size: 18px !important;
-            font-weight: 600 !important;
-            color: #999 !important;
-            padding-right: 16px !important;
-            min-width: 40px !important;
+            display: none !important;
         }
 
-        /* Upvote arrow - styled button appearance */
+        /* Upvote/vote section - minimal styling */
         .athing td.votelinks {
-            padding-right: 12px !important;
+            padding: 0 !important;
+            width: auto !important;
+            order: -1 !important;
+            margin-right: 8px !important;
         }
 
         .athing td.votelinks center {
@@ -135,98 +139,126 @@
         }
 
         .athing td.votelinks a {
-            display: inline-block !important;
-            width: 32px !important;
-            height: 32px !important;
-            border-radius: 4px !important;
-            background: #f0f0f0 !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            transition: all 0.2s ease !important;
+            display: block !important;
+            width: auto !important;
+            height: auto !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            padding: 0 !important;
+            opacity: 0.5 !important;
+            transition: opacity 0.2s ease !important;
         }
 
         .athing td.votelinks a:hover {
-            background: #4a90e2 !important;
+            opacity: 1 !important;
+            background: transparent !important;
         }
 
-        /* Story title link - larger, more prominent */
+        /* Title section - takes up remaining space */
+        .athing td.title {
+            padding: 0 !important;
+            flex: 1 !important;
+        }
+
+        /* Story title link - serif font like LessWrong */
         .titleline {
-            font-size: 20px !important;
-            font-weight: 600 !important;
-            line-height: 1.4 !important;
-            margin-bottom: 8px !important;
+            font-size: 16.9px !important;
+            font-weight: 400 !important;
+            line-height: 22.1px !important;
+            margin-bottom: 0 !important;
+            font-family: warnock-pro, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif !important;
         }
 
         .titleline > a {
-            color: #1a1a1a !important;
+            color: rgba(0, 0, 0, 0.87) !important;
             text-decoration: none !important;
             transition: color 0.2s ease !important;
         }
 
         .titleline > a:hover {
-            color: #4a90e2 !important;
+            color: rgba(0, 0, 0, 0.6) !important;
         }
 
         .titleline > a:visited {
-            color: #666 !important;
+            color: rgba(0, 0, 0, 0.6) !important;
         }
 
-        /* Domain name - subtle styling */
+        /* Domain name - very subtle */
         .titleline .sitebit {
-            font-size: 14px !important;
-            color: #999 !important;
+            font-size: 12px !important;
+            color: rgba(0, 0, 0, 0.4) !important;
             font-weight: 400 !important;
-            margin-left: 8px !important;
+            margin-left: 6px !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
         }
 
         .titleline .sitestr {
-            color: #999 !important;
+            color: rgba(0, 0, 0, 0.4) !important;
         }
 
-        /* Metadata row (points, user, time, comments) */
+        /* Metadata row (points, user, time, comments) - hide it as LessWrong shows this differently */
         .athing + tr {
-            background: #fff !important;
-            border-radius: 0 0 8px 8px !important;
-            margin: -20px 24px 16px 24px !important;
-            padding: 0 20px 16px 20px !important;
+            display: none !important;
         }
 
-        .athing + tr td.subtext {
-            padding: 0 !important;
-            padding-left: 56px !important;
-            font-size: 14px !important;
-            color: #666 !important;
-        }
-
-        .athing + tr td.subtext span {
-            margin-right: 12px !important;
-        }
-
-        .athing + tr td.subtext a {
-            color: #666 !important;
-            text-decoration: none !important;
-            transition: color 0.2s ease !important;
-        }
-
-        .athing + tr td.subtext a:hover {
-            color: #4a90e2 !important;
-            text-decoration: underline !important;
-        }
-
-        /* Points/score - make it more prominent */
-        .athing + tr td.subtext .score {
-            font-weight: 600 !important;
-            color: #4a90e2 !important;
-        }
-
-        /* Spacer rows - increase spacing between stories */
+        /* Spacer rows - minimal spacing */
         tr.spacer {
             height: 0 !important;
         }
 
         tr.morespace {
-            height: 0 !important;
+            height: 8px !important;
+            background: transparent !important;
+        }
+
+        /* === ADD KARMA/POINTS DISPLAY IN LESSWRONG STYLE === */
+        
+        /* We need to inject the points before the title using CSS pseudo-elements where possible,
+           but since we can't easily access the text content, we'll style the existing layout */
+        
+        /* Make the subtext row visible but style it LessWrong-way */
+        .athing + tr {
+            display: table-row !important;
+            background: #fff !important;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.05) !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .athing + tr:hover {
+            background: rgb(245, 245, 245) !important;
+        }
+
+        /* Make the metadata appear inline before the title */
+        .athing + tr > td {
+            padding: 0 10px 10px 10px !important;
+        }
+
+        .athing + tr td.subtext {
+            padding: 0 10px 10px 38px !important;
+            font-size: 14.3px !important;
+            color: rgb(117, 117, 117) !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        }
+
+        .athing + tr td.subtext span {
+            margin-right: 8px !important;
+        }
+
+        .athing + tr td.subtext a {
+            color: rgb(117, 117, 117) !important;
+            text-decoration: none !important;
+            transition: color 0.2s ease !important;
+        }
+
+        .athing + tr td.subtext a:hover {
+            color: rgba(0, 0, 0, 0.87) !important;
+        }
+
+        /* Points/score - subtle gray like LessWrong karma */
+        .athing + tr td.subtext .score {
+            font-weight: 400 !important;
+            color: rgb(117, 117, 117) !important;
         }
 
         /* === FOOTER STYLES === */
@@ -235,39 +267,40 @@
         body > center > table > tbody > tr:last-child td {
             padding: 24px !important;
             text-align: center !important;
-            background: #f8f8f8 !important;
-            border-top: 1px solid #e5e5e5 !important;
+            background: #fff !important;
+            border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
         }
 
         body > center > table > tbody > tr:last-child a {
-            color: #666 !important;
+            color: rgb(117, 117, 117) !important;
             text-decoration: none !important;
             margin: 0 8px !important;
-            font-size: 14px !important;
+            font-size: 13px !important;
         }
 
         body > center > table > tbody > tr:last-child a:hover {
-            color: #4a90e2 !important;
-            text-decoration: underline !important;
+            color: rgba(0, 0, 0, 0.87) !important;
         }
 
-        /* "More" link - styled as button */
+        /* "More" link - subtle styling */
         .morelink {
             display: inline-block !important;
-            padding: 12px 24px !important;
-            background: #4a90e2 !important;
-            color: #fff !important;
-            border-radius: 6px !important;
+            padding: 8px 16px !important;
+            background: #fff !important;
+            color: rgb(117, 117, 117) !important;
+            border-radius: 0 !important;
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
             text-decoration: none !important;
-            font-weight: 600 !important;
+            font-weight: 400 !important;
             transition: all 0.2s ease !important;
-            margin: 24px !important;
+            margin: 16px !important;
         }
 
         .morelink:hover {
-            background: #357abd !important;
-            transform: translateY(-1px) !important;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+            background: rgb(245, 245, 245) !important;
+            border-color: rgba(0, 0, 0, 0.2) !important;
+            transform: none !important;
+            box-shadow: none !important;
         }
 
         /* === COMMENT PAGE STYLES === */
@@ -275,50 +308,52 @@
         /* Comment table */
         table.comment-tree {
             width: 100% !important;
-            max-width: 800px !important;
-            margin: 0 auto !important;
-            padding: 24px !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
 
-        /* Individual comments - card styling */
+        /* Individual comments - minimal styling */
         .comtr {
             background: #fff !important;
-            border-radius: 6px !important;
-            margin: 12px 0 !important;
-            padding: 16px !important;
-            border-left: 3px solid #e5e5e5 !important;
-            transition: border-color 0.2s ease !important;
+            border-radius: 0 !important;
+            margin: 0 !important;
+            padding: 12px !important;
+            border-left: none !important;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+            transition: background 0.15s ease !important;
         }
 
         .comtr:hover {
-            border-left-color: #4a90e2 !important;
+            background: rgb(245, 245, 245) !important;
         }
 
         /* Comment text */
         .comment {
-            font-size: 15px !important;
+            font-size: 14px !important;
             line-height: 1.6 !important;
-            color: #333 !important;
+            color: rgba(0, 0, 0, 0.87) !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
         }
 
         .comment p {
-            margin: 12px 0 !important;
+            margin: 8px 0 !important;
         }
 
         /* Comment metadata */
         .comhead {
             font-size: 13px !important;
-            color: #999 !important;
+            color: rgb(117, 117, 117) !important;
             margin-bottom: 8px !important;
         }
 
         .comhead a {
-            color: #666 !important;
+            color: rgb(117, 117, 117) !important;
             text-decoration: none !important;
         }
 
         .comhead a:hover {
-            color: #4a90e2 !important;
+            color: rgba(0, 0, 0, 0.87) !important;
         }
 
         /* === MOBILE RESPONSIVENESS === */
@@ -326,20 +361,14 @@
         @media (max-width: 768px) {
             body > center {
                 max-width: 100% !important;
-                box-shadow: none !important;
-            }
-
-            .athing {
-                margin: 12px 16px !important;
-                padding: 16px !important;
             }
 
             .titleline {
-                font-size: 18px !important;
+                font-size: 15px !important;
             }
 
             .athing + tr td.subtext {
-                padding-left: 40px !important;
+                padding-left: 30px !important;
                 font-size: 13px !important;
             }
         }
@@ -350,62 +379,64 @@
         input[type="text"], 
         input[type="password"], 
         textarea {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-            font-size: 15px !important;
-            padding: 10px 12px !important;
-            border: 1px solid #d0d0d0 !important;
-            border-radius: 4px !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+            font-size: 14px !important;
+            padding: 8px 10px !important;
+            border: 1px solid rgba(0, 0, 0, 0.15) !important;
+            border-radius: 2px !important;
             transition: border-color 0.2s ease !important;
+            background: #fff !important;
         }
 
         input[type="text"]:focus, 
         input[type="password"]:focus, 
         textarea:focus {
             outline: none !important;
-            border-color: #4a90e2 !important;
-            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1) !important;
+            border-color: rgba(0, 0, 0, 0.3) !important;
+            box-shadow: none !important;
         }
 
         /* Submit buttons */
         input[type="submit"] {
-            background: #4a90e2 !important;
-            color: #fff !important;
-            border: none !important;
-            padding: 10px 20px !important;
-            border-radius: 4px !important;
-            font-size: 15px !important;
-            font-weight: 600 !important;
+            background: #fff !important;
+            color: rgba(0, 0, 0, 0.87) !important;
+            border: 1px solid rgba(0, 0, 0, 0.15) !important;
+            padding: 8px 16px !important;
+            border-radius: 2px !important;
+            font-size: 14px !important;
+            font-weight: 400 !important;
             cursor: pointer !important;
             transition: all 0.2s ease !important;
         }
 
         input[type="submit"]:hover {
-            background: #357abd !important;
-            transform: translateY(-1px) !important;
+            background: rgb(245, 245, 245) !important;
+            border-color: rgba(0, 0, 0, 0.25) !important;
+            transform: none !important;
         }
 
         /* === MISC IMPROVEMENTS === */
         
-        /* Remove underlines from most links */
+        /* Links */
         a {
-            transition: all 0.2s ease !important;
+            transition: color 0.2s ease !important;
         }
 
         /* Code blocks */
         pre {
-            background: #f5f5f5 !important;
+            background: rgb(245, 245, 245) !important;
             padding: 12px !important;
-            border-radius: 4px !important;
+            border-radius: 2px !important;
             overflow-x: auto !important;
-            border: 1px solid #e5e5e5 !important;
+            border: 1px solid rgba(0, 0, 0, 0.08) !important;
         }
 
         code {
             font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
-            font-size: 14px !important;
-            background: #f5f5f5 !important;
-            padding: 2px 6px !important;
-            border-radius: 3px !important;
+            font-size: 13px !important;
+            background: rgb(245, 245, 245) !important;
+            padding: 2px 4px !important;
+            border-radius: 2px !important;
         }
 
         /* Table borders - remove old-style borders */
@@ -415,11 +446,6 @@
 
         td {
             border: none !important;
-        }
-
-        /* Improve readability of job listings */
-        .athing.athing[id^="job-"] {
-            border-left: 4px solid #f39c12 !important;
         }
     `);
 
