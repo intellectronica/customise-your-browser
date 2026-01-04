@@ -33,14 +33,6 @@ When creating userscripts (also known as monkeyscripts, Greasemonkey scripts, Ta
 
 Some userscripts may use Chrome's built-in AI APIs powered by Gemini Nano. These run client-side without server calls.
 
-### Requirements
-
-- **Chrome 138+** (some APIs require origin trial registration)
-- **OS**: Windows 10+, macOS 13+, Linux, or ChromeOS (Chromebook Plus only)
-- **Storage**: 22 GB free space minimum
-- **GPU**: >4 GB VRAM, OR **CPU**: 16 GB RAM + 4 cores
-- **Connection**: Unmetered/unlimited data
-
 ### Available APIs
 
 #### Prompt API
