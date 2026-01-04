@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         Hacker News AI Summary
 // @namespace    https://elite-ai-assisted-coding.dev/
-// @version      0.0.4
+// @version      0.0.5
 // @description  Adds a "summary" link to Hacker News items that uses Chrome's built-in AI Summarizer API.
 // @author       GitHub Copilot
 // @match        https://news.ycombinator.com/*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_addStyle
+// @connect      *
 // ==/UserScript==
 
 (function() {
