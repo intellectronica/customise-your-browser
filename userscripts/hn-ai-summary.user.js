@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hacker News AI Summary
 // @namespace    https://elite-ai-assisted-coding.dev/
-// @version      0.0.5
+// @version      0.0.6
 // @description  Adds a "summary" link to Hacker News items that uses Chrome's built-in AI Summarizer API.
 // @author       GitHub Copilot
 // @match        https://news.ycombinator.com/*
@@ -161,20 +161,10 @@
             // 2. Create the summarizer session IMMEDIATELY to preserve the user gesture.
             // Chrome requires a user gesture (like the click that triggered this function)
             // to start a download if the model isn't already present.
-            if (availabilityStatus === 'downloadable' || availabilityStatus === 'downloading') {
-                contentArea.innerText = 'Downloading AI model... this may take a minute.';
-            }
-
             const summarizer = await summarizerAPI.create({
                 type: 'teaser',
                 format: 'plain-text',
-                length: 'medium',
-                monitor(m) {
-                    m.addEventListener('downloadprogress', (e) => {
-                        const percent = Math.round((e.loaded / e.total) * 100);
-                        contentArea.innerText = `Downloading AI model: ${percent}%...`;
-                    });
-                }
+                length: 'medium'
             });
 
             // 3. Fetch the page content using GM_xmlhttpRequest (to bypass CORS)
