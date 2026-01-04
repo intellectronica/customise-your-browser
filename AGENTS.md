@@ -4,7 +4,8 @@
 
 - Always commit your changes when you have completed a task or reached a logical stopping point
 - Use clear, descriptive commit messages that explain what was done and why
-- Ensure the working directory is clean (all changes committed) before ending your session
+- After committing, always pull with rebase (`git pull --rebase`) and push to the remote
+- Ensure the working directory is clean (all changes committed and pushed) before ending your session
 
 ## Userscripts
 
