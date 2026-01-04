@@ -1,3 +1,5 @@
+# Agent Instructions - User Scripts and Chrome Extensions
+
 ## Git Workflow
 
 - Always commit your changes when you have completed a task or reached a logical stopping point
