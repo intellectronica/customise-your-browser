@@ -7,6 +7,11 @@
 - After committing, always pull with rebase (`git pull --rebase`) and push to the remote
 - Ensure the working directory is clean (all changes committed and pushed) before ending your session
 
+## Project Structure
+
+- **Userscripts**: All userscripts must be placed in the `userscripts/` directory
+- **Extensions**: All Chrome extensions must be placed in the `extensions/` directory
+
 ## Userscripts
 
 When creating userscripts (also known as monkeyscripts, Greasemonkey scripts, Tampermonkey scripts, etc.):
@@ -29,6 +34,20 @@ When creating userscripts (also known as monkeyscripts, Greasemonkey scripts, Ta
 - Request the minimum set of `@grant` permissions required for the script to function
 - Never omit a permission that is actually required
 - If no special permissions are needed, use `@grant none`
+
+## Chrome Extensions
+
+When creating Chrome extensions:
+
+### Setup
+
+- Create a new directory inside `extensions/` for the extension
+- Ensure the extension is ready for unpacked installation (developer mode)
+
+### Assets
+
+- **Icons**: Always use PNG format for icons. SVG format is not supported for extension icons in the manifest.
+- Provide appropriate icon sizes (e.g., 16, 48, 128)
 
 ## Chrome Built-in AI APIs
 
