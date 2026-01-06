@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Copy Page as Markdown
 // @namespace    https://elite-ai-assisted-coding.dev/
-// @version      0.0.1
+// @version      0.0.2
 // @description  Converts page HTML to Markdown and copies it to clipboard
 // @author       GitHub Copilot
 // @match        *://*/*
@@ -14,22 +14,40 @@
     'use strict';
 
     /**
-     * Converts the current page content to Markdown and copies it to the clipboard.
+     * Converts the current page content or selection to Markdown and copies it to the clipboard.
      */
     function copyAsMarkdown() {
         console.log('[Copy as Markdown] Starting conversion...');
 
         try {
             // Initialize Turndown service
-            // Documentation: https://github.com/mixmark-io/turndown
             const turndownService = new TurndownService({
                 headingStyle: 'atx',
                 codeBlockStyle: 'fenced'
             });
 
-            // Get the HTML content of the body (or the whole document if preferred)
-            // Using body content is usually more useful than the entire <html> structure
-            const html = document.body.innerHTML;
+            let html = '';
+            let source = 'page';
+
+            // Check if there is a selection
+            const selection = window.getSelection();
+            if (selection && selection.rangeCount > 0 && !selection.isCollapsed) {
+                // Get HTML content from selection
+                const container = document.createElement('div');
+                for (let i = 0; i < selection.rangeCount; i++) {
+                    container.appendChild(selection.getRangeAt(i).cloneContents());
+                }
+                html = container.innerHTML;
+                source = 'selection';
+            } else {
+                // Get the HTML content of the body if no selection
+                html = document.body.innerHTML;
+            }
+
+            if (!html || html.trim() === '') {
+                console.warn('[Copy as Markdown] No content found to copy.');
+                return;
+            }
 
             // Convert HTML to Markdown
             const markdown = turndownService.turndown(html);
@@ -37,13 +55,13 @@
             // Copy to clipboard
             GM_setClipboard(markdown);
 
-            console.log('[Copy as Markdown] Markdown copied to clipboard!');
+            console.log(`[Copy as Markdown] ${source} copied to clipboard!`);
             
             // Optional: Provide visual feedback
-            showToast('Page copied as Markdown!');
+            showToast(source === 'selection' ? 'Selection copied as Markdown!' : 'Page copied as Markdown!');
         } catch (error) {
             console.error('[Copy as Markdown] Error during conversion:', error);
-            alert('Failed to copy page as Markdown. See console for details.');
+            alert('Failed to copy as Markdown. See console for details.');
         }
     }
 
