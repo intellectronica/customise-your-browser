@@ -24,14 +24,10 @@
         toString: selection ? `${selection.toString().substring(0, 50)}...` : 'n/a'
       });
 
-      if (selection && selection.rangeCount > 0 && selection.toString().trim() !== '') {
-        const container = document.createElement('div');
-        for (let i = 0; i < selection.rangeCount; i += 1) {
-          const range = selection.getRangeAt(i);
-          container.appendChild(range.cloneContents());
-        }
-        html = container.innerHTML;
-        source = 'selection';
+      const selectionResult = getSelectionHtml(selection);
+      if (selectionResult) {
+        html = selectionResult.html;
+        source = selectionResult.source;
       } else if (window.self === window.top) {
         html = document.body ? document.body.innerHTML : '';
         source = 'page';
@@ -55,6 +51,78 @@
       console.error('[Copy as Markdown] Error during conversion:', error);
       alert('Failed to copy as Markdown. See console for details.');
     }
+  }
+
+  /**
+   * Returns selected HTML or text as HTML from the document or active element.
+   */
+  function getSelectionHtml(selection) {
+    if (selection && selection.rangeCount > 0 && selection.toString().trim() !== '') {
+      const container = document.createElement('div');
+      for (let i = 0; i < selection.rangeCount; i += 1) {
+        const range = selection.getRangeAt(i);
+        container.appendChild(range.cloneContents());
+      }
+
+      const inner = container.innerHTML.trim();
+      if (inner) {
+        return { html: inner, source: 'selection' };
+      }
+
+      // Some selections (e.g., inside inputs) may not have HTML ranges.
+      const text = selection.toString().trim();
+      if (text) {
+        return { html: `<p>${escapeHtml(text)}</p>`, source: 'selection' };
+      }
+    }
+
+    const active = document.activeElement;
+    if (active && isTextInput(active)) {
+      const start = active.selectionStart ?? 0;
+      const end = active.selectionEnd ?? 0;
+      if (start !== end) {
+        const text = active.value.substring(start, end).trim();
+        if (text) {
+          return { html: `<p>${escapeHtml(text)}</p>`, source: 'selection' };
+        }
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Detects whether the element is a text input or textarea.
+   */
+  function isTextInput(element) {
+    if (!element || element.nodeType !== Node.ELEMENT_NODE) {
+      return false;
+    }
+
+    const tagName = element.tagName.toLowerCase();
+    if (tagName === 'textarea') {
+      return true;
+    }
+
+    if (tagName !== 'input') {
+      return element.isContentEditable;
+    }
+
+    const type = (element.getAttribute('type') || 'text').toLowerCase();
+    const supported = ['text', 'search', 'email', 'url', 'tel', 'password', 'number'];
+    return supported.includes(type);
+  }
+
+  /**
+   * Escapes text for safe insertion into a HTML wrapper.
+   */
+  function escapeHtml(text) {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   /**
