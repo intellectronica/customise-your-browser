@@ -1,12 +1,37 @@
 // ==UserScript==
 // @name         Hacker News AI Summary
 // @namespace    https://elite-ai-assisted-coding.dev/
-// @version      0.0.1
+// @version      0.0.2
 // @description  Adds a "summary" link to each HN item that uses Chrome's built-in AI to summarize linked pages
 // @author       Eleanor
 // @match        https://news.ycombinator.com/*
 // @grant        GM_xmlhttpRequest
+// @grant        GM.xmlHttpRequest
 // @connect      *
+// @connect      github.com
+// @connect      medium.com
+// @connect      substack.com
+// @connect      arxiv.org
+// @connect      nytimes.com
+// @connect      theguardian.com
+// @connect      bbc.com
+// @connect      bbc.co.uk
+// @connect      techcrunch.com
+// @connect      arstechnica.com
+// @connect      wired.com
+// @connect      theregister.com
+// @connect      reuters.com
+// @connect      bloomberg.com
+// @connect      wsj.com
+// @connect      twitter.com
+// @connect      x.com
+// @connect      youtube.com
+// @connect      reddit.com
+// @connect      wikipedia.org
+// @connect      stackoverflow.com
+// @connect      dev.to
+// @connect      hackernoon.com
+// @connect      lobste.rs
 // ==/UserScript==
 
 (function() {
