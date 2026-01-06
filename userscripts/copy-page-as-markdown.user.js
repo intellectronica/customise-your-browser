@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Copy Page as Markdown
 // @namespace    https://elite-ai-assisted-coding.dev/
-// @version      0.0.3
+// @version      0.0.4
 // @description  Converts page HTML to Markdown and copies it to clipboard
 // @author       GitHub Copilot
 // @match        *://*/*
@@ -48,9 +48,15 @@
                 }
                 html = container.innerHTML;
                 source = 'selection';
-            } else {
-                // Get the HTML content of the body if no selection
+            } else if (window.self === window.top) {
+                // Get the HTML content of the body if no selection AND we are in the top window
                 html = document.body.innerHTML;
+                source = 'page';
+            } else {
+                // If we are in an iframe and nothing is selected, do nothing
+                // This prevents the iframe content from overwriting the clipboard
+                console.log('[Copy as Markdown] No selection in iframe, skipping full-page copy.');
+                return;
             }
 
             if (!html || html.trim() === '') {
@@ -112,6 +118,7 @@
         // On macOS, users often expect Cmd, but the request specifically said "control-shift-C"
         if (e.ctrlKey && e.shiftKey && e.code === 'KeyC') {
             e.preventDefault();
+            e.stopImmediatePropagation();
             copyAsMarkdown();
         }
     }, true);
