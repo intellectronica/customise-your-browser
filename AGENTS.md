@@ -2,10 +2,17 @@
 
 ## Git Workflow
 
-- Always commit your changes when you have completed a task or reached a logical stopping point
-- Use clear, descriptive commit messages that explain what was done and why
-- After committing, always pull with rebase (`git pull --rebase`) and push to the remote
-- Ensure the working directory is clean (all changes committed and pushed) before ending your session
+**⚠️ CRITICAL: These git workflow rules MUST be followed strictly - they are NON-NEGOTIABLE:**
+
+- **ALWAYS** commit your changes when you have completed a task or reached a logical stopping point
+- **ALWAYS** use clear, descriptive commit messages starting with `[AI]` that explain what was done and why
+  - Example: `git commit -m "[AI] Add YouTube video timestamp navigation userscript"`
+- **ALWAYS** pull with rebase after committing: `git pull --rebase`
+- **ALWAYS** push to the remote after pulling: `git push`
+- **BEFORE ENDING YOUR SESSION**: Ensure the working directory is clean (all changes committed and pushed)
+  - Verify with `git status` - it must show "nothing to commit, working tree clean"
+
+**DO NOT skip these steps. DO NOT end a session with uncommitted or unpushed changes.**
 
 ## Project Structure
 
