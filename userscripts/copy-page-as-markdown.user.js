@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Copy Page as Markdown
 // @namespace    https://elite-ai-assisted-coding.dev/
-// @version      0.0.2
+// @version      0.0.3
 // @description  Converts page HTML to Markdown and copies it to clipboard
 // @author       GitHub Copilot
 // @match        *://*/*
@@ -31,11 +31,20 @@
 
             // Check if there is a selection
             const selection = window.getSelection();
-            if (selection && selection.rangeCount > 0 && !selection.isCollapsed) {
+            
+            // Debugging: log the selection state
+            console.log('[Copy as Markdown] Selection state:', {
+                rangeCount: selection ? selection.rangeCount : 'none',
+                isCollapsed: selection ? selection.isCollapsed : 'n/a',
+                toString: selection ? selection.toString().substring(0, 50) + '...' : 'n/a'
+            });
+
+            if (selection && selection.rangeCount > 0 && selection.toString().trim() !== '') {
                 // Get HTML content from selection
                 const container = document.createElement('div');
                 for (let i = 0; i < selection.rangeCount; i++) {
-                    container.appendChild(selection.getRangeAt(i).cloneContents());
+                    const range = selection.getRangeAt(i);
+                    container.appendChild(range.cloneContents());
                 }
                 html = container.innerHTML;
                 source = 'selection';
